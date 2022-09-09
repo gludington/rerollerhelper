@@ -16,11 +16,6 @@ const HI_COMMAND = {
 
 const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${env["APPLICATION_ID"]}&scope=applications.commands`;
 
-/**
- * Gotta see someone 'bout a trout
- * @param {VercelRequest} request
- * @param {VercelResponse} response
- */
 const discord = async (request: NextApiRequest, response: NextApiResponse) => {
   console.error(request);
   if (request.method === "GET") {
@@ -73,3 +68,5 @@ const discord = async (request: NextApiRequest, response: NextApiResponse) => {
     }
   }
 };
+
+export default discord;
