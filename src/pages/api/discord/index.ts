@@ -1,7 +1,7 @@
-import { VercelRequest, VercelResponse } from "@vercel/node";
 import { InteractionResponseType, InteractionType, verifyKey } from "discord-interactions";
 import { NextApiRequest, NextApiResponse } from "next";
 import getRawBody from "raw-body";
+import { Readable } from "node:stream";
 import { env } from "../../../env/server.mjs";
 
 const INVITE_COMMAND = {
@@ -16,6 +16,20 @@ const HI_COMMAND = {
 
 const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${env["APPLICATION_ID"]}&scope=applications.commands`;
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+async function buffer(readable: Readable) {
+  const chunks = [];
+  for await (const chunk of readable) {
+    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
 const discord = async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === "GET") {
     return response.status(405).send({ error: "Bad request method " });
@@ -25,8 +39,9 @@ const discord = async (request: NextApiRequest, response: NextApiResponse) => {
     // Verify the request
     const signature = request.headers["x-signature-ed25519"];
     const timestamp = request.headers["x-signature-timestamp"];
-    const rawBody = await getRawBody(request);
 
+    const buf = await buffer(request);
+    const rawBody = buf.toString("utf8");
     const isValidRequest =
       typeof signature === "string" && typeof timestamp === "string" && verifyKey(rawBody, signature, timestamp, env["PUBLIC_KEY"]);
 
