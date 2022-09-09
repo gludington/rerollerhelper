@@ -13,6 +13,7 @@ export const serverSchema = z.object({
   DISCORD_CLIENT_ID: z.string(),
   DISCORD_CLIENT_SECRET: z.string(),
   APPLICATION_ID: z.string(),
+  PUBLIC_KEY: z.string(),
 });
 
 /**

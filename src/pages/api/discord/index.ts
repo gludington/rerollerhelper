@@ -1,5 +1,6 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { InteractionResponseType, InteractionType, verifyKey } from "discord-interactions";
+import { NextApiRequest, NextApiResponse } from "next";
 import getRawBody from "raw-body";
 import { env } from "../../../env/server.mjs";
 
@@ -20,7 +21,7 @@ const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${env["APPLIC
  * @param {VercelRequest} request
  * @param {VercelResponse} response
  */
-module.exports = async (request: VercelRequest, response: VercelResponse) => {
+const discord = async (request: NextApiRequest, response: NextApiResponse) => {
   console.error(request);
   if (request.method === "GET") {
     console.error(INVITE_URL);
@@ -32,7 +33,8 @@ module.exports = async (request: VercelRequest, response: VercelResponse) => {
     const timestamp = request.headers["x-signature-timestamp"];
     const rawBody = await getRawBody(request);
 
-    const isValidRequest = verifyKey(rawBody, signature, timestamp, env["PUBLIC_KEY"]);
+    const isValidRequest =
+      typeof signature === "string" && typeof timestamp === "string" && verifyKey(rawBody, signature, timestamp, env["PUBLIC_KEY"]);
 
     if (!isValidRequest) {
       return response.status(401).send({ error: "Bad request signature " });
