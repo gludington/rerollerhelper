@@ -34,6 +34,20 @@ const discord = async (request: NextApiRequest, response: NextApiResponse) => {
 
     const rawBody = JSON.stringify(request.body);
 
+    console.error(signature);
+    console.error(typeof signature);
+    console.error(timestamp);
+    console.error(typeof timestamp);
+    console.error(rawBody);
+    console.error(env["PUBLIC_KEY"]);
+    console.error(
+      verifyKey(
+        rawBody,
+        typeof signature === "string" ? signature : "ddd",
+        typeof timestamp === "string" ? timestamp : "ack",
+        env["PUBLIC_KEY"],
+      ),
+    );
     const isValidRequest =
       typeof signature === "string" && typeof timestamp === "string" && verifyKey(rawBody, signature, timestamp, env["PUBLIC_KEY"]);
 
