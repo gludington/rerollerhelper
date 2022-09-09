@@ -1,4 +1,4 @@
-import { Message, InteractionResponseType, InteractionType, verifyKey } from "discord-interactions";
+import { InteractionResponseType, InteractionType, verifyKey } from "discord-interactions";
 import { NextApiRequest, NextApiResponse } from "next";
 import getRawBody from "raw-body";
 import { Readable } from "node:stream";
@@ -55,7 +55,7 @@ const discord = async (request: NextApiRequest, response: NextApiResponse) => {
     }
 
     // Handle the request
-    const message = rawBody as Message;
+    const message = rawBody as any;
 
     // Handle PINGs from Discord
     if (message.type === InteractionType.PING) {
