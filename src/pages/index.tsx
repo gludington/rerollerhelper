@@ -20,19 +20,15 @@ const Home: NextPage = () => {
         </h1>
         {session ? (
           <>
-          <h3>Hello {session.user.name}</h3>
-          <button onClick={() => signOut()}>Logout</button>
+            <h3>Hello {session.user?.name}</h3>
+            <button onClick={() => signOut()}>Logout</button>
           </>
-        ): (
-              <button onClick={() => signIn("discord")}>Login with Discord</button>
+        ) : (
+          <button onClick={() => signIn("discord")}>Login with Discord</button>
         )}
         <p className="text-2xl text-gray-700">This stack uses:</p>
         <div className="grid gap-3 pt-3 mt-3 text-center md:grid-cols-2 lg:w-2/3">
-          <TechnologyCard
-            name="NextJS"
-            description="The React framework for production"
-            documentation="https://nextjs.org/"
-          />
+          <TechnologyCard name="NextJS" description="The React framework for production" documentation="https://nextjs.org/" />
           <TechnologyCard
             name="TypeScript"
             description="Strongly typed programming language that builds on JavaScript, giving you better tooling at any scale"
@@ -43,16 +39,8 @@ const Home: NextPage = () => {
             description="Rapidly build modern websites without ever leaving your HTML"
             documentation="https://tailwindcss.com/"
           />
-          <TechnologyCard
-            name="tRPC"
-            description="End-to-end typesafe APIs made easy"
-            documentation="https://trpc.io/"
-          />
-          <TechnologyCard
-            name="Next-Auth"
-            description="Authentication for Next.js"
-            documentation="https://next-auth.js.org/"
-          />
+          <TechnologyCard name="tRPC" description="End-to-end typesafe APIs made easy" documentation="https://trpc.io/" />
+          <TechnologyCard name="Next-Auth" description="Authentication for Next.js" documentation="https://next-auth.js.org/" />
           <TechnologyCard
             name="Prisma"
             description="Build data-driven JavaScript & TypeScript apps in less time"
@@ -75,11 +63,7 @@ type TechnologyCardProps = {
   documentation: string;
 };
 
-const TechnologyCard = ({
-  name,
-  description,
-  documentation,
-}: TechnologyCardProps) => {
+const TechnologyCard = ({ name, description, documentation }: TechnologyCardProps) => {
   return (
     <section className="flex flex-col justify-center p-6 duration-500 border-2 border-gray-500 rounded shadow-xl motion-safe:hover:scale-105">
       <h2 className="text-lg text-gray-700">{name}</h2>

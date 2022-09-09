@@ -8,10 +8,7 @@ import superjson from "superjson";
 import type { AppRouter } from "../server/router";
 import "../styles/globals.css";
 
-const MyApp: AppType = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
+const MyApp: AppType = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
     <SessionProvider session={session}>
       <Component {...pageProps} />
@@ -36,9 +33,7 @@ export default withTRPC<AppRouter>({
     return {
       links: [
         loggerLink({
-          enabled: (opts) =>
-            process.env.NODE_ENV === "development" ||
-            (opts.direction === "down" && opts.result instanceof Error),
+          enabled: (opts) => process.env.NODE_ENV === "development" || (opts.direction === "down" && opts.result instanceof Error),
         }),
         httpBatchLink({ url }),
       ],
