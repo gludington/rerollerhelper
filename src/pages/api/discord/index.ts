@@ -22,35 +22,31 @@ export const config = {
   },
 };
 
+async function buffer(readable: Readable) {
+  const chunks = [];
+  for await (const chunk of readable) {
+    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
 const discord = async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === "GET") {
     return response.status(405).send({ error: "Bad request method " });
   }
+
   // Only respond to POST requests
   if (request.method === "POST") {
     // Verify the request
     const signature = request.headers["x-signature-ed25519"];
     const timestamp = request.headers["x-signature-timestamp"];
 
-    console.error("wthi");
-    console.error(request.body);
-    const rawBody = JSON.stringify(request.body);
-
-    console.error(signature);
-    console.error(typeof signature);
-    console.error(timestamp);
-    console.error(typeof timestamp);
+    console.error("buffertime");
+    const buf = await buffer(request);
+    console.error(buf);
+    const rawBody = buf.toString("utf8");
     console.error(rawBody);
-    console.error(env["PUBLIC_KEY"]);
-    console.error(
-      verifyKey(
-        rawBody,
-        typeof signature === "string" ? signature : "ddd",
-        typeof timestamp === "string" ? timestamp : "ack",
-        env["PUBLIC_KEY"],
-      ),
-    );
-    console.error(request.body);
+
     const isValidRequest =
       typeof signature === "string" && typeof timestamp === "string" && verifyKey(rawBody, signature, timestamp, env["PUBLIC_KEY"]);
 
