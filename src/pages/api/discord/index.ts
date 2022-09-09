@@ -17,9 +17,8 @@ const HI_COMMAND = {
 const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${env["APPLICATION_ID"]}&scope=applications.commands`;
 
 const discord = async (request: NextApiRequest, response: NextApiResponse) => {
-  console.error(request);
   if (request.method === "GET") {
-    console.error(INVITE_URL);
+    return response.status(405).send({ error: "Bad request method " });
   }
   // Only respond to POST requests
   if (request.method === "POST") {
