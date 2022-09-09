@@ -55,7 +55,7 @@ const discord = async (request: NextApiRequest, response: NextApiResponse) => {
     }
 
     // Handle the request
-    const message = rawBody as any;
+    const message = JSON.parse(rawBody) as any;
     console.error(message.type + " vs " + InteractionType.PING);
     // Handle PINGs from Discord
     if (message.type === InteractionType.PING) {
