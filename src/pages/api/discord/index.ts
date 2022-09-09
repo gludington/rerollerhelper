@@ -32,6 +32,8 @@ const discord = async (request: NextApiRequest, response: NextApiResponse) => {
     const signature = request.headers["x-signature-ed25519"];
     const timestamp = request.headers["x-signature-timestamp"];
 
+    console.error("wthi");
+    console.error(request.body);
     const rawBody = JSON.stringify(request.body);
 
     console.error(signature);
