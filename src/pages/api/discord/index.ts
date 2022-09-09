@@ -1,4 +1,4 @@
-import { InteractionResponseType, InteractionType, verifyKey } from "discord-interactions";
+import { Message, InteractionResponseType, InteractionType, verifyKey } from "discord-interactions";
 import { NextApiRequest, NextApiResponse } from "next";
 import getRawBody from "raw-body";
 import { Readable } from "node:stream";
@@ -43,9 +43,9 @@ const discord = async (request: NextApiRequest, response: NextApiResponse) => {
 
     console.error("buffertime");
     const buf = await buffer(request);
-    console.error(buf);
+    //console.error(buf);
     const rawBody = buf.toString("utf8");
-    console.error(rawBody);
+    //console.error(rawBody);
 
     const isValidRequest =
       typeof signature === "string" && typeof timestamp === "string" && verifyKey(rawBody, signature, timestamp, env["PUBLIC_KEY"]);
@@ -55,7 +55,7 @@ const discord = async (request: NextApiRequest, response: NextApiResponse) => {
     }
 
     // Handle the request
-    const message = request.body;
+    const message = rawBody as Message;
 
     // Handle PINGs from Discord
     if (message.type === InteractionType.PING) {
