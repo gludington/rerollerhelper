@@ -22,14 +22,6 @@ export const config = {
   },
 };
 
-async function buffer(readable: Readable) {
-  const chunks = [];
-  for await (const chunk of readable) {
-    chunks.push(typeof chunk === "string" ? Buffer.from(chunk) : chunk);
-  }
-  return Buffer.concat(chunks);
-}
-
 const discord = async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === "GET") {
     return response.status(405).send({ error: "Bad request method " });
@@ -40,8 +32,8 @@ const discord = async (request: NextApiRequest, response: NextApiResponse) => {
     const signature = request.headers["x-signature-ed25519"];
     const timestamp = request.headers["x-signature-timestamp"];
 
-    const buf = await buffer(request);
-    const rawBody = buf.toString("utf8");
+    const rawBody = JSON.stringify(request.body);
+
     const isValidRequest =
       typeof signature === "string" && typeof timestamp === "string" && verifyKey(rawBody, signature, timestamp, env["PUBLIC_KEY"]);
 
